@@ -1,0 +1,16 @@
+body {
+    background-image: url(Card_Deck/a-topview-of-a-wooden-table-vector.jpg);
+    background-size: cover;
+}
+
+h1 {
+    font-size:60px ;
+    color: rgb(0, 0, 0);
+    text-align: center;
+}
+
+form{
+    justify-content: center;
+    display: flex;
+    margin-top: 4%;
+}
