@@ -1,7 +1,4 @@
-import * as random from 'random';
-var Nickname, P1, P2, myDeck;
-
-class Card extends object {
+class Card {
   constructor(tarcza, symbol) {
     this.tarcza = tarcza;
     this.symbol = symbol;
@@ -45,7 +42,7 @@ class Card extends object {
 
 }
 
-class Deck extends object {
+class Deck {
   constructor() {
     this.cards = [];
     this.build();
@@ -65,26 +62,23 @@ class Deck extends object {
       tarcza = _pj_a[_pj_c];
 
       for (var symbol = 1, _pj_d = 14; symbol < _pj_d; symbol += 1) {
-        this.cards.append(new Card(tarcza, symbol));
+        this.cards.push(new Card(tarcza, symbol));
       }
     }
   }
 
-  shuffle(num = 1) {
-    var lenght, randnum;
-    lenght = this.cards.length;
+  shuffle(array) {
+    let currentIndex = array.length, randomIndex;
 
-    for (var i = 0, _pj_a = num; i < _pj_a; i += 1) {
-      for (var a = lenght - 1, _pj_b = 0; a < _pj_b; a += -1) {
-        randnum = random.randint(0, 1);
-
-        if (a === randnum) {
-          continue;
-        }
-
-        [this.cards[a], this.cards[randnum]] = [this.cards[randnum], this.cards[a]];
-      }
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
     }
+
+    return array;
+
   }
 
   deal() {
@@ -93,7 +87,7 @@ class Deck extends object {
 
 }
 
-class Player extends object {
+class Player {
   constructor(name, result = 0) {
     this.name = name;
     this.hand = [];
@@ -107,7 +101,7 @@ class Player extends object {
       card = deck.deal();
 
       if (card) {
-        this.hand.append(card);
+        this.hand.push(card);
       } else {
         return false;
       }
@@ -117,7 +111,19 @@ class Player extends object {
   }
 
   showHand() {
-    console.log("Karty {} to: {}".format(this.name, this.hand));
+    console.log(this.name, this.hand);
+    let nazwa = document.createElement("p");
+    nazwa.innerHTML = this.name;
+    document.getElementById(this.name).appendChild(nazwa);
+    this.hand.forEach(element => {
+      var elem = document.createElement("img");
+      elem.setAttribute("height", "100");
+      elem.setAttribute("width", "80");
+      let source = element.symbol + "_" + element.tarcza;
+      elem.src = 'Card_deck/' + source + '.png';
+      document.getElementById(this.name).appendChild(elem);
+    });
+  
     return this;
   }
 
@@ -147,35 +153,40 @@ class Player extends object {
 
 }
 
-function Nickname() {
-    var input = document.getElementById("Nickname").value;
-    alert(input);
-}
+let x = function Nickname() {
+  var input = document.getElementById("Nickname").value;
+  document.getElementById("human").id = input;
+  alert(input);
+  myDeck = new Deck();
+  shuffledDeck = myDeck.shuffle(myDeck.cards)
+  console.log(shuffledDeck)
+  P1 = new Player(`${input}`, 0);
+  P2 = new Player("Alexa", 0);
 
-myDeck = new Deck();
-myDeck.shuffle();
-P1 = new Player(`${Nickname}`, 0);
-P2 = new Player("Your opponent", 0);
+  for (var e = 1, _pj_a = 11; e < _pj_a; e += 1) {
+      if (e % 2 !== 0) {
+          P1.draw(myDeck, 1);
+      } else {
+          P2.draw(myDeck, 1);
+      }
+  }
 
-for (var e = 1, _pj_a = 11; e < _pj_a; e += 1) {
-  if (e % 2 !== 0) {
-    P1.draw(myDeck, 1);
+  P1.score();
+  P2.score();
+  P1.showHand();
+  P2.showHand();
+  if (P1.result > P2.result) {
+      let result = `${P1.name} scored ${P1.result} and ${P2.name} scored ${P2.result}. ${P1.name} wins!`;
+      document.getElementById("result").innerHTML = result
   } else {
-    P2.draw(myDeck, 1);
+      if (P1.result < P2.result) {
+          let result = `${P1.name} scored ${P1.result} and ${P2.name} scored ${P2.result}. ${P2.name} wins!`;
+          document.getElementById("result").innerHTML = result
+      } else {
+          let result = `${P1.name} scored ${P1.result} and ${P2.name} scored ${P2.result}. It's a draw!`;
+          document.getElementById("result").innerHTML = result
+      }
   }
 }
 
-P1.score();
-P2.score();
-P1.showHand();
-P2.showHand();
 
-if (P1.result > P2.result) {
-  console.log(`${P1.name} scored ${P1.result} and ${P2.name} scored ${P2.result}. ${P1.name} wins!`);
-} else {
-  if (P1.result < P2.result) {
-    console.log(`${P1.name} scored ${P1.result} and ${P2.name} scored ${P2.result}. ${P2.name} wins!`);
-  } else {
-    console.log(`${P1.name} scored ${P1.result} and ${P2.name} scored ${P2.result}. It's a draw!`);
-  }
-}

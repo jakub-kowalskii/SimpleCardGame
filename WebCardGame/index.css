@@ -14,3 +14,23 @@ form{
     display: flex;
     margin-top: 4%;
 }
+
+#parent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    }
+.player {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+#result{
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
